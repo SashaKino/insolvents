@@ -90,7 +90,7 @@ public class insolvents {
                                     Address = BankruptPerson.getNamedItem("Address").getTextContent();
 
 
-                                    System.out.println(FirstName + " " + MiddleName + " " + LastName + " " + Address);
+                                    //System.out.println(FirstName + " " + MiddleName + " " + LastName + " " + Address);
 
                                     BankruptPersonNodeList = BankruptInfoNode1.getChildNodes();
 
@@ -149,9 +149,18 @@ public class insolvents {
                                     }
                                 }
 
-                                inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', NULL,'"+Birthdate+"', '" + Birthplace + "', '" + CaseNumber + "', '" + MessageType + "')";
-                                //System.out.println(inserting);
-                                st.executeUpdate(inserting);
+
+
+                                    inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', NULL,'" + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + MessageType + "')";
+                                    //System.out.println(inserting);
+                                try {
+                                    st.executeUpdate(inserting);
+                                } catch ( SQLException e) {
+                                    System.out.println(inserting);
+                                    System.out.println( e);
+                                }
+
+
                            }
                             //System.out.println(ishuman);
                         }
