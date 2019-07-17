@@ -9,7 +9,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLOutput;
+
+import java.sql.*;
+
 
 public class insolvents {
     public static void main(String[] args) {
@@ -33,8 +35,8 @@ public class insolvents {
                 NodeList mdl = root.getChildNodes();
                 System.out.println("длина: " + mdl.getLength());
 
-                NodeList nlist, BankruptInfoNodeList, BankruptPersonNodeList;
-                Node md, nn, an, BankruptInfoNode1, BankruptPersonNode;
+                NodeList nlist, BankruptInfoNodeList, BankruptPersonNodeList, MessageInfoNodeList;
+                Node md, nn, an, BankruptInfoNode1, BankruptPersonNode, MessageInfoNode;
                 NamedNodeMap BankruptPerson, MessageInfo;
 
                 String BankruptInfo;
@@ -44,15 +46,18 @@ public class insolvents {
 
 
                 String inserting;
+                Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+                String connectionUrl =
+                        "jdbc:sqlserver://FREE:1433;databaseName=DEV;integratedSecurity=true";
+                Connection con = DriverManager.getConnection(connectionUrl);
+                Statement st = con.createStatement();
 
-
-                int BankruptInfoNodeListlength;
 
                 boolean ishuman = false;
 
                 for
                     //(int i = 0; i < mdl.getLength(); i++)
-                (int i = 0; i < 250; i++) {
+                (int i = 0; i < mdl.getLength(); i++) {
                     md = mdl.item(i);
                     nlist = md.getChildNodes();
                     //System.out.println(i + ": ");
@@ -69,17 +74,14 @@ public class insolvents {
 
                             if (BankruptInfo.length() > 10) {
 
-                                System.out.println(i + ": ");
                                 ishuman = true;
 
 
                                 if (nn.hasChildNodes()) {
-                                    //System.out.println(nn.getNodeName()+" "+nn.hasChildNodes() );
 
                                     BankruptInfoNodeList = nn.getChildNodes();
-                                    //  BankruptInfoNodeListlength = BankruptInfoNodeList.getLength();
+
                                     BankruptInfoNode1 = BankruptInfoNodeList.item(0);
-                                    //System.out.println(BankruptInfoNode1.getNodeName()+" "+BankruptInfoNode1.hasAttributes() );
 
                                     BankruptPerson = BankruptInfoNode1.getAttributes();
                                     FirstName = BankruptPerson.getNamedItem("FirstName").getTextContent();
@@ -94,7 +96,7 @@ public class insolvents {
 
                                     for (int bpnl = 0; bpnl < BankruptPersonNodeList.getLength(); bpnl++) {
                                         BankruptPersonNode = BankruptPersonNodeList.item(bpnl);
-                                        System.out.println("BankruptPersonNode  " + BankruptPersonNode.getNodeName() + "  " + BankruptPersonNode.getTextContent());
+                                        //System.out.println("BankruptPersonNode  " + BankruptPersonNode.getNodeName() + "  " + BankruptPersonNode.getTextContent());
 
 
                                         if (BankruptPersonNode.getNodeName().equals("Birthdate"))
@@ -112,38 +114,44 @@ public class insolvents {
                                     // System.out.println("a "+ a);
                                     an = nlist.item(a);
 
-                                    //System.out.println();
-
-
-                                    //if (an.getNodeName().equals("Id"))
-                                    // System.out.print(an.getNodeName() + " " + an.getTextContent() + " ");
-
-                                    //if (an.getNodeName().equals("Number"))
-                                    //   System.out.print(an.getNodeName() + " " + an.getTextContent());
-
-                                    //if (an.getNodeName().equals("BankruptInfo"))
-                                    //   System.out.println(an.getNodeName() + " " + an.getTextContent() + " ");
 
                                     if (an.getNodeName().equals("CaseNumber"))
                                         CaseNumber = an.getTextContent();
-                                    //   System.out.println(an.getNodeName() + " " + an.getTextContent());
-                                    //if ((!nn.getNodeName().equals("PublisherInfo")) & (!nn.getNodeName().equals("MessageInfo")))
-                                    //    System.out.println(an.getNodeName() + " " + an.getTextContent());
+
                                     if (an.getNodeName().equals("MessageInfo")) {
 
                                         MessageInfo = an.getAttributes();
 
                                         MessageType = MessageInfo.getNamedItem("MessageType").getTextContent();
-                                        System.out.println("MessageType: " + MessageType);
 
 
-                                        if (nn.getTextContent().contains("банкротом"))
-                                            System.out.println(nn.getTextContent());
+                                        //if (MessageType.equals("ReceivingCreditorDemand")) {
+
+                                            MessageInfoNodeList = an.getChildNodes();
+
+                                        if (MessageInfoNodeList.getLength() > 1) {
+                                            System.out.println("MessageType: " + MessageType);
+                                            System.out.println(MessageInfoNodeList.getLength());
+
+                                        }
+
+                                            /*
+                                            for (int min = 0; min < MessageInfoNodeList.getLength(); min++) {
+                                                MessageInfoNode = MessageInfoNodeList.item(min);
+                                                System.out.println(MessageInfoNode.getNodeName());
+                                                }
+                                                */
+                                       // }
+
+
+                                        //(nn.getTextContent().contains("банкротом"))
+                                            //System.out.println(an.getTextContent());
                                     }
                                 }
 
-                                inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', NULL, NULL, '" + Birthplace + "', '" + CaseNumber + "', '" + MessageType + "')";
-                                System.out.println(inserting);
+                                inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', NULL,'"+Birthdate+"', '" + Birthplace + "', '" + CaseNumber + "', '" + MessageType + "')";
+                                //System.out.println(inserting);
+                                st.executeUpdate(inserting);
                            }
                             //System.out.println(ishuman);
                         }
