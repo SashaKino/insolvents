@@ -1,0 +1,62 @@
+парсим mes-1-2019_1.xml
+длина: 8766
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Дмитрий', 'Геннадьевич', 'Золотухин', 'г. Кострома, пр-т Мира, д. 17, кв. 19', NULL,'05.07.1967', 'гор.  Ташкент Узбекской ССР', 'А31-4191/2017 (до объединения № дела А31-1228/2017)', 'Auction')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+парсим mes-1-2019_2.xml
+длина: 24321
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Александр', 'Дейвис-Александрасович', 'Слишаевас', '625023, Тюменская область, г. Тюмень, ул. Котовского, д. 55А, кв. 504', NULL,'26.08.1990', 'гор. Тюмень', 'А70-11828/2018 ', 'ArbitralDecree')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Василий', 'Александрович', 'Чистов', '412300. Саратовская область, г. Балашов, ул. 8 Марта, д. 48 Подробнее: http://www.kommersant.ru/doc/2657906?captchaKey=f3448a9cb35ec8b488a4db2f455cc7a0&captchaCode=8136&CheckCaptchCode=%25CE%25F2%25EF%25F0%25E0%25E2%25E8%25F2%25FC', NULL,'22.05.1957', 'г. Балашов Саратовской области', 'А57-21645/2014 ', 'Meeting')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+java.lang.NullPointerException
+парсим mes-1-2019_3.xml
+длина: 35393
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Жания', 'Ериковна', 'Горбунова', '142118, Московская область, г. Подольск, мкр. Кузнечики, ул. Генерала Варенникова, д. 4, кв. 61', NULL,'18.03.1972', 'Решением Арбитражного суда Московской области от 21/01/2019 г. (Резолютивная часть объявлена17.01.2019 г.) по делу № А41-85830/2018 Горбунова Жания Ериковна (18.03.1972 г.р., место рождения: пгт. Светлый, Светлинского района Оренбургской области, место регистрации: 142118, Московская область, г. Под', 'А41-85830/2018 ', 'ArbitralDecree')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Екатерина Владимировна', '', 'Галанцева', '184366, Мурманская обл., Кольский р-н, Кильдинстрой пос., Севернаяул., 27', NULL,'29.12.1985', 'Кильдинстрой пос., Кольского р-на,Мурманской обл., ', 'А42-6826/2018 ', 'MeetingResult')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+java.lang.NullPointerException
+парсим mes-2-2019_1.xml
+длина: 26409
+java.lang.NullPointerException
+парсим mes-2-2019_2.xml
+длина: 33613
+java.lang.NullPointerException
+парсим mes-2-2019_3.xml
+длина: 25286
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Адик', 'Лентушович', 'Дарбинян', '606570, Нижегородская область, Ковернинский район, п.г.т. Ковернино, ул. Казанина, д. 8, кв. 17', NULL,'01.10.1957', 'с. Хаштарак Иджеванского р-на Армянской ССР', 'А43-30000/2017 Карасева Марина Романовна (шифр 42-73', 'ArbitralDecree')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+java.lang.NullPointerException
+парсим mes-3-2019_1.xml
+длина: 24874
+java.lang.NullPointerException
+парсим mes-3-2019_2.xml
+длина: 33675
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Дмитрий', 'Геннадьевич', 'Золотухин', 'г. Кострома, пр-т Мира, д. 17, кв. 19', NULL,'05.07.1967', 'гор.  Ташкент Узбекской ССР', 'А31-4191/2017 (до объединения № дела А31-1228/2017)', 'Auction')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Василий', 'Александрович', 'Чистов', '412300. Саратовская область, г. Балашов, ул. 8 Марта, д. 48 Подробнее: http://www.kommersant.ru/doc/2657906?captchaKey=f3448a9cb35ec8b488a4db2f455cc7a0&captchaCode=8136&CheckCaptchCode=%25CE%25F2%25EF%25F0%25E0%25E2%25E8%25F2%25FC', NULL,'22.05.1957', 'г. Балашов Саратовской области', 'А57-21645/2014 ', 'MeetingResult')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+java.lang.NullPointerException
+парсим mes-3-2019_3.xml
+длина: 31555
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Жания', 'Ериковна', 'Горбунова', '142118, Московская область, г. Подольск, мкр. Кузнечики, ул. Генерала Варенникова, д. 4, кв. 61', NULL,'18.03.1972', 'Решением Арбитражного суда Московской области от 21/01/2019 г. (Резолютивная часть объявлена17.01.2019 г.) по делу № А41-85830/2018 Горбунова Жания Ериковна (18.03.1972 г.р., место рождения: пгт. Светлый, Светлинского района Оренбургской области, место регистрации: 142118, Московская область, г. Под', 'А41-85830/2018 ', 'ReceivingCreditorDemand')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Жания', 'Ериковна', 'Горбунова', '142118, Московская область, г. Подольск, мкр. Кузнечики, ул. Генерала Варенникова, д. 4, кв. 61', NULL,'18.03.1972', 'Решением Арбитражного суда Московской области от 21/01/2019 г. (Резолютивная часть объявлена17.01.2019 г.) по делу № А41-85830/2018 Горбунова Жания Ериковна (18.03.1972 г.р., место рождения: пгт. Светлый, Светлинского района Оренбургской области, место регистрации: 142118, Московская область, г. Под', 'А41-85830/2018 ', 'ReceivingCreditorDemand')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Оксана', 'Николаевна', 'Пинегина', ' 445144, Самарская область, Ставропольский район, с. Ягодное, пер. Благополучный 2-й, д. 11 В. 445030, Самарская область, г. Тольятти, б-р Цветной, д. 10, кв. 138. Последнее место регистрации: 445131, Самарская область, Ставропольский район, с. Узюково, ул. Лесная, д. 50', NULL,'27.08.1969', 'город Тольятти Куйбышевской области', 'А55-31730/2017 ', 'DealInvalid')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+java.lang.NullPointerException
+парсим mes-4-2019_1.xml
+длина: 33215
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Оксана', 'Николаевна', 'Пинегина', ' 445144, Самарская область, Ставропольский район, с. Ягодное, пер. Благополучный 2-й, д. 11 В. 445030, Самарская область, г. Тольятти, б-р Цветной, д. 10, кв. 138. Последнее место регистрации: 445131, Самарская область, Ставропольский район, с. Узюково, ул. Лесная, д. 50', NULL,'27.08.1969', 'город Тольятти Куйбышевской области', 'А55-31730/2017 ', 'DealInvalid')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Оксана', 'Николаевна', 'Пинегина', ' 445144, Самарская область, Ставропольский район, с. Ягодное, пер. Благополучный 2-й, д. 11 В. 445030, Самарская область, г. Тольятти, б-р Цветной, д. 10, кв. 138. Последнее место регистрации: 445131, Самарская область, Ставропольский район, с. Узюково, ул. Лесная, д. 50', NULL,'27.08.1969', 'город Тольятти Куйбышевской области', 'А55-31730/2017 ', 'DealInvalid')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+Insert into [DEV].[dbo].[bankrots]  VALUES ('ДЕНИС', 'АЛЕКСАНДРОВИЧ', 'БЕЛЯЕВ', '164520, город Северодвинск, улица Торцева, дом 18 квартира 76', NULL,'30.06.1987', 'город Северодвинск', 'А05-3171/2019 Судья: Цыганков Александр Владимирович', 'ArbitralDecree')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Сергей', 'Васильевич', 'Горяев', ' 613455, Кировская область, Нолинский район, дер. Перевоз, ул. Советская, д.95, кв. 2', NULL,'18.12.1963', 'Решением Арбитражного суда Челябинской области от 08.10.2018г. по делу №А76-28657/2018 (резолютивная часть решения) Ковалева Марина Геннадьевна (09.03.1971г.р., место рождения: г. Челябинск, ИНН 744900701586, СНИЛС 074-924-156 82; адрес регистрации: 454078, Челябинская обл., г. Челябинск, ул. Барбюс', 'А28-15292/2018 ', 'Meeting')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.
+парсим mes-4-2019_2.xml
+длина: 31073
+Insert into [DEV].[dbo].[bankrots]  VALUES ('Александр', 'Дейвис-Александрасович', 'Слишаевас', '625023, Тюменская область, г. Тюмень, ул. Котовского, д. 55А, кв. 504', NULL,'26.08.1990', 'гор. Тюмень', 'А70-11828/2018 ', 'ArbitralDecree')
+com.microsoft.sqlserver.jdbc.SQLServerException: String or binary data would be truncated.

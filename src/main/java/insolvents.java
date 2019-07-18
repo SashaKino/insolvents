@@ -35,8 +35,8 @@ public class insolvents {
                 NodeList mdl = root.getChildNodes();
                 System.out.println("длина: " + mdl.getLength());
 
-                NodeList nlist, BankruptInfoNodeList, BankruptPersonNodeList, MessageInfoNodeList;
-                Node md, nn, an, BankruptInfoNode1, BankruptPersonNode, MessageInfoNode;
+                NodeList nlist, BankruptInfoNodeList, BankruptPersonNodeList, MessageInfoNodeList, MessageInfoNode1NodeList;
+                Node md, nn, an, BankruptInfoNode1, BankruptPersonNode, MessageInfoNode1, MessageInfoNode1Node;
                 NamedNodeMap BankruptPerson, MessageInfo;
 
                 String BankruptInfo;
@@ -123,17 +123,45 @@ public class insolvents {
                                         MessageInfo = an.getAttributes();
 
                                         MessageType = MessageInfo.getNamedItem("MessageType").getTextContent();
+                                        System.out.println("MessageType: "+ MessageType);
 
 
-                                        //if (MessageType.equals("ReceivingCreditorDemand")) {
+                                       if (MessageType.equals("ReceivingCreditorDemand")) {
 
                                             MessageInfoNodeList = an.getChildNodes();
+                                            MessageInfoNode1 = MessageInfoNodeList.item(0);
 
-                                        if (MessageInfoNodeList.getLength() > 1) {
+                                            if (MessageInfoNode1.hasChildNodes()) {
+                                                MessageInfoNode1NodeList=MessageInfoNode1.getChildNodes() ;
+
+                                                for (int min1n = 0; min1n < MessageInfoNode1NodeList.getLength()  ; min1n++) {
+                                                    MessageInfoNode1Node = MessageInfoNode1NodeList.item(min1n);
+                                                    System.out.println(MessageInfoNode1Node.getNodeName());
+                                                     if ( !MessageInfoNode1Node.getNodeName().equals("Text")) {
+                                                     System.out.println(MessageInfoNode1Node.getTextContent());
+                                                }
+
+                                                    }
+
+
+
+
+                                                }
+
+
+
+
+
+                                            }
+
+
+
+
+                                        /*if (MessageInfoNodeList.getLength() > 1) {
                                             System.out.println("MessageType: " + MessageType);
                                             System.out.println(MessageInfoNodeList.getLength());
-
-                                        }
+                                                                                    }
+                                                                                    */
 
                                             /*
                                             for (int min = 0; min < MessageInfoNodeList.getLength(); min++) {
@@ -153,15 +181,18 @@ public class insolvents {
 
                                     inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', NULL,'" + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + MessageType + "')";
                                     //System.out.println(inserting);
-                                try {
-                                    st.executeUpdate(inserting);
-                                } catch ( SQLException e) {
-                                    System.out.println(inserting);
-                                    System.out.println( e);
-                                }
+
+                               // try {
+                                //   st.executeUpdate(inserting);
+                               // } catch ( SQLException e) {
+                               //     System.out.println(inserting);
+                                //    System.out.println( e);
+
+                               // }
 
 
-                           }
+                                System.out.println();
+                            }
                             //System.out.println(ishuman);
                         }
                     }
