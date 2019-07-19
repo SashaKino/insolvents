@@ -131,11 +131,13 @@ public class insolvents {
 
                                         MessageInfo = an.getAttributes();
 
+
                                         MessageType = MessageInfo.getNamedItem("MessageType").getTextContent();
+
                                         System.out.println("MessageType: "+ MessageType);
 
 
-                                       if (MessageType.equals("ReceivingCreditorDemand")) {
+                                       if (MessageType.equals("ReceivingCreditorDemand") & an.hasChildNodes()) {
 
                                             MessageInfoNodeList = an.getChildNodes();
                                             MessageInfoNode1 = MessageInfoNodeList.item(0);
@@ -153,11 +155,11 @@ public class insolvents {
                                                     if (MessageInfoNode1Node.getNodeName().equals("CreditorName"))
                                                         CreditorName = MessageInfoNode1Node.getTextContent();
                                                     if ( MessageInfoNode1Node.getNodeName().equals("ReasonOccurence"));
-                                                        ReasonOccurence = MessageInfoNode1Node.getTextContent();
+                                                    ReasonOccurence = MessageInfoNode1Node.getTextContent();
 
-                                                    }
-                                               }
-                                           }
+                                                }
+                                            }
+                                        }
 
                                         /*if (MessageInfoNodeList.getLength() > 1) {
                                             System.out.println("MessageType: " + MessageType);
@@ -185,6 +187,8 @@ public class insolvents {
                                     creditor_inserting = "Insert into [DEV].[dbo].[creditors]  VALUES (" + INN + ", '" + CreditorName + "', '" + DemandSum + "', '" + DemandDate + "', '" + ReasonOccurence + "')";
 
                                     System.out.println(inserting);
+
+                                    if (MessageType.equals("ReceivingCreditorDemand"))
                                     System.out.println(creditor_inserting);
 
                                // try {
