@@ -183,23 +183,33 @@ public class insolvents {
 
 
 
+                                if (MessageType.equals("ArbitralDecree")) {
                                     inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",'" + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + MessageType + "')";
+                                    System.out.println(inserting);
+                                     try {
+                                       st.executeUpdate(inserting);
+                                     } catch ( SQLException e) {
+                                        System.out.println("Исключение " +e + " в строке ");
+                                        System.out.println(inserting);
+                                     }
+                                }
+
+                                if (MessageType.equals("ReceivingCreditorDemand")) {
                                     creditor_inserting = "Insert into [DEV].[dbo].[creditors]  VALUES (" + INN + ", '" + CreditorName + "', '" + DemandSum + "', '" + DemandDate + "', '" + ReasonOccurence + "')";
 
-                                    System.out.println(inserting);
-
-                                    if (MessageType.equals("ReceivingCreditorDemand"))
                                     System.out.println(creditor_inserting);
 
-                               // try {
-                                //   st.executeUpdate(inserting);
-                               // } catch ( SQLException e) {
-                               //     System.out.println(inserting);
-                                //    System.out.println( e);
+                                      try {
+                                        st.executeUpdate(creditor_inserting);
+                                      } catch ( SQLException e) {
+                                          System.out.println(creditor_inserting);
 
-                               // }
+                                          System.out.println("Исключение " +e + " в строке ");
+                                          System.out.println(creditor_inserting);
 
+                                      }
 
+                                }
                                 System.out.println();
                             }
                             //System.out.println(ishuman);
