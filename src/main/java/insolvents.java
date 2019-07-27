@@ -35,9 +35,9 @@ public class insolvents {
                 NodeList mdl = root.getChildNodes();
                 System.out.println("длина: " + mdl.getLength());
 
-                NodeList nlist, BankruptInfoNodeList, BankruptPersonNodeList, MessageInfoNodeList, MessageInfoNode1NodeList;
-                Node md, nn, an, BankruptInfoNode1, BankruptPersonNode, MessageInfoNode1, MessageInfoNode1Node;
-                NamedNodeMap BankruptPerson, MessageInfo;
+                NodeList nlist, BankruptInfoNodeList, BankruptPersonNodeList, MessageInfoNodeList, MessageInfoNode1NodeList, CourtDecisionNodeList;
+                Node md, nn, an, BankruptInfoNode1, BankruptPersonNode, MessageInfoNode1, MessageInfoNode1Node, CourtDecisionNode;
+                NamedNodeMap BankruptPerson, MessageInfo, DecisionType;
 
                 String BankruptInfo;
 
@@ -46,9 +46,16 @@ public class insolvents {
                 FirstName = MiddleName = LastName = Address = Birthdate = Birthplace = MessageType = CaseNumber = "NULL";
                 long INN=0;
 
+
+
+
+
                 // для кредитора
                 String CreditorName, DemandSum, DemandDate, ReasonOccurence;
                 CreditorName= DemandSum = DemandDate = ReasonOccurence = "NULL";
+
+                //для типа решения
+                String DecisionTypeId="NULL";
 
 
                 String inserting, creditor_inserting;
@@ -70,11 +77,65 @@ public class insolvents {
 
                     for (int ii = 0; ii < nlist.getLength(); ii++) {
 
-                        nn = nlist.item(ii);
                         ishuman = false;
+                        nn = nlist.item(ii);
+
+                        if (nn.getNodeName().equals("MessageInfo")) {
+
+                            MessageInfo = nn.getAttributes();
+
+
+                            MessageType = MessageInfo.getNamedItem("MessageType").getTextContent();
+
+                            //System.out.println("MessageType: "+ MessageType);
+
+
+                            if ((MessageType.equals("ReceivingCreditorDemand") | MessageType.equals("ArbitralDecree")) & nn.hasChildNodes()) {
+
+                                MessageInfoNodeList = nn.getChildNodes();
+                                MessageInfoNode1 = MessageInfoNodeList.item(0);
+
+                                if (MessageInfoNode1.hasChildNodes()) {
+                                    MessageInfoNode1NodeList=MessageInfoNode1.getChildNodes() ;
+
+                                    for (int min1n = 0; min1n < MessageInfoNode1NodeList.getLength()  ; min1n++) {
+                                        MessageInfoNode1Node = MessageInfoNode1NodeList.item(min1n);
+
+                                        //если MessageInfoNode1 - ReceivingCreditorDemand
+                                        if (MessageInfoNode1Node.getNodeName().equals("DemandDate"))
+                                            DemandDate = MessageInfoNode1Node.getTextContent();
+                                        if (MessageInfoNode1Node.getNodeName().equals("DemandSum"))
+                                            DemandSum = MessageInfoNode1Node.getTextContent();
+                                        if (MessageInfoNode1Node.getNodeName().equals("CreditorName"))
+                                            CreditorName = MessageInfoNode1Node.getTextContent();
+                                        if ( MessageInfoNode1Node.getNodeName().equals("ReasonOccurence"));
+                                        ReasonOccurence = MessageInfoNode1Node.getTextContent();
+
+                                      //  еслn MessageInfoNode1 - MessageInfo
+                                        if (MessageInfoNode1Node.getNodeName().equals("DecisionType")){
+                                            DecisionType = MessageInfoNode1Node.getAttributes();
+                                            DecisionTypeId=DecisionType.getNamedItem("Id").getTextContent();
+
+
+                                        }
+
+
+
+
+
+
+
+                                    }
+                                }
+
+                            }
+
+                           // System.out.println("MessageType = " + MessageType);
+                        }
+
+
 
                         if (nn.getNodeName().equals("BankruptInfo")) {
-
 
                             BankruptInfo = nn.getTextContent();
 
@@ -94,9 +155,6 @@ public class insolvents {
                                     MiddleName = BankruptPerson.getNamedItem("MiddleName").getTextContent();
                                     LastName = BankruptPerson.getNamedItem("LastName").getTextContent();
                                     Address = BankruptPerson.getNamedItem("Address").getTextContent();
-
-
-                                    //System.out.println(FirstName + " " + MiddleName + " " + LastName + " " + Address);
 
                                     BankruptPersonNodeList = BankruptInfoNode1.getChildNodes();
 
@@ -127,93 +185,82 @@ public class insolvents {
                                     if (an.getNodeName().equals("CaseNumber"))
                                         CaseNumber = an.getTextContent();
 
-                                    if (an.getNodeName().equals("MessageInfo")) {
-
-                                        MessageInfo = an.getAttributes();
-
-
-                                        MessageType = MessageInfo.getNamedItem("MessageType").getTextContent();
-
-                                        System.out.println("MessageType: "+ MessageType);
-
-
-                                       if (MessageType.equals("ReceivingCreditorDemand") & an.hasChildNodes()) {
-
-                                            MessageInfoNodeList = an.getChildNodes();
-                                            MessageInfoNode1 = MessageInfoNodeList.item(0);
-
-                                            if (MessageInfoNode1.hasChildNodes()) {
-                                                MessageInfoNode1NodeList=MessageInfoNode1.getChildNodes() ;
-
-                                                for (int min1n = 0; min1n < MessageInfoNode1NodeList.getLength()  ; min1n++) {
-                                                    MessageInfoNode1Node = MessageInfoNode1NodeList.item(min1n);
-
-                                                    if (MessageInfoNode1Node.getNodeName().equals("DemandDate"))
-                                                        DemandDate = MessageInfoNode1Node.getTextContent();
-                                                    if (MessageInfoNode1Node.getNodeName().equals("DemandSum"))
-                                                        DemandSum = MessageInfoNode1Node.getTextContent();
-                                                    if (MessageInfoNode1Node.getNodeName().equals("CreditorName"))
-                                                        CreditorName = MessageInfoNode1Node.getTextContent();
-                                                    if ( MessageInfoNode1Node.getNodeName().equals("ReasonOccurence"));
-                                                    ReasonOccurence = MessageInfoNode1Node.getTextContent();
-
-                                                }
-                                            }
-                                        }
-
-                                        /*if (MessageInfoNodeList.getLength() > 1) {
-                                            System.out.println("MessageType: " + MessageType);
-                                            System.out.println(MessageInfoNodeList.getLength());
-                                                                                    }
-                                                                                    */
-
-                                            /*
-                                            for (int min = 0; min < MessageInfoNodeList.getLength(); min++) {
-                                                MessageInfoNode = MessageInfoNodeList.item(min);
-                                                System.out.println(MessageInfoNode.getNodeName());
-                                                }
-                                                */
-                                       // }
-
-
-                                        //(nn.getTextContent().contains("банкротом"))
-                                            //System.out.println(an.getTextContent());
-                                    }
-                                }
-
-
-
-                                if (MessageType.equals("ArbitralDecree")) {
-                                    inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",'" + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + MessageType + "')";
-                                    System.out.println(inserting);
-                                     try {
-                                       st.executeUpdate(inserting);
-                                     } catch ( SQLException e) {
-                                        System.out.println("Исключение " +e + " в строке ");
-                                        System.out.println(inserting);
-                                     }
-                                }
-
-                                if (MessageType.equals("ReceivingCreditorDemand")) {
-                                    creditor_inserting = "Insert into [DEV].[dbo].[creditors]  VALUES (" + INN + ", '" + CreditorName + "', '" + DemandSum + "', '" + DemandDate + "', '" + ReasonOccurence + "')";
-
-                                    System.out.println(creditor_inserting);
-
-                                      try {
-                                        st.executeUpdate(creditor_inserting);
-                                      } catch ( SQLException e) {
-                                          System.out.println(creditor_inserting);
-
-                                          System.out.println("Исключение " +e + " в строке ");
-                                          System.out.println(creditor_inserting);
-
-                                      }
 
                                 }
-                                System.out.println();
+
                             }
                             //System.out.println(ishuman);
                         }
+
+                        /* Можно удалять
+
+                        if (nn.getNodeName().equals("CourtDecision"))
+                        {
+                            if (nn.hasChildNodes()) {
+                                System.out.println("CourtDecision: nn.hasChildNodes " + nn.hasChildNodes() );
+                                CourtDecisionNodeList = nn.getChildNodes();
+
+                                for (int c = 0; c < CourtDecisionNodeList.getLength(); i++) {
+                                    CourtDecisionNode = CourtDecisionNodeList.item(c);
+                                    System.out.println(CourtDecisionNode.getNodeName());
+                                    if (CourtDecisionNode.getNodeName().equals("DesisionType")){
+                                        System.out.println( "has attributes: " + CourtDecisionNode.hasChildNodes() );
+                                        DecisionType = CourtDecisionNode.getAttributes();
+                                        DecisionTypeId=DecisionType.getNamedItem("Id").getTextContent();
+                                        System.out.println("DecisionTypeId: "+DecisionTypeId);
+
+                                    }
+                               }
+
+                               }
+                            }
+                            */
+
+
+
+                        }
+
+                        if ( MessageType.equals("ArbitralDecree") & ( DecisionTypeId.equals(7) | DecisionTypeId.equals(19)) )  {
+                            inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",'" + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + DecisionTypeId + "')";
+
+                            System.out.println(inserting);
+                           /*
+                            try {
+                                st.executeUpdate(inserting);
+                            } catch ( SQLException e) {
+                                System.out.println("Исключение " +e + " в строке ");
+                                System.out.println(inserting);
+                            }
+
+                         */
+                        }
+
+
+
+                        if (MessageType.equals("ReceivingCreditorDemand")) {
+                            creditor_inserting = "Insert into [DEV].[dbo].[creditors]  VALUES (" + INN + ", '" + CreditorName + "', '" + DemandSum + "', '" + DemandDate + "', '" + ReasonOccurence + "')";
+
+                            System.out.println(creditor_inserting);
+
+                            /*
+                            try {
+                                st.executeUpdate(creditor_inserting);
+                            } catch ( SQLException e) {
+                                System.out.println(creditor_inserting);
+
+                                System.out.println("Исключение " +e + " в строке ");
+                                System.out.println(creditor_inserting);
+                            }
+
+                        }
+                        */
+
+
+
+
+
+                        //здесь заканчивается тег message data
+
                     }
                 }
 
