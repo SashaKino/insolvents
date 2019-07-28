@@ -58,7 +58,7 @@ public class insolvents {
                 String DecisionTypeId="NULL";
 
 
-                String inserting, creditor_inserting;
+                String inserting, creditor_inserting, mfo_demand_inserting;
                 Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
                 String connectionUrl =
                         "jdbc:sqlserver://FREE:1433;databaseName=DEV;integratedSecurity=true";
@@ -101,22 +101,31 @@ public class insolvents {
                                     for (int min1n = 0; min1n < MessageInfoNode1NodeList.getLength()  ; min1n++) {
                                         MessageInfoNode1Node = MessageInfoNode1NodeList.item(min1n);
 
-                                        //если MessageInfoNode1 - ReceivingCreditorDemand
-                                        if (MessageInfoNode1Node.getNodeName().equals("DemandDate"))
-                                            DemandDate = MessageInfoNode1Node.getTextContent();
-                                        if (MessageInfoNode1Node.getNodeName().equals("DemandSum"))
-                                            DemandSum = MessageInfoNode1Node.getTextContent();
-                                        if (MessageInfoNode1Node.getNodeName().equals("CreditorName"))
-                                            CreditorName = MessageInfoNode1Node.getTextContent();
-                                        if ( MessageInfoNode1Node.getNodeName().equals("ReasonOccurence"));
-                                        ReasonOccurence = MessageInfoNode1Node.getTextContent();
+                                        try {
+                                            //если MessageInfoNode1 - ReceivingCreditorDemand
+                                            if (MessageInfoNode1Node.getNodeName().equals("DemandDate"))
+                                                DemandDate = MessageInfoNode1Node.getTextContent();
+                                            if (MessageInfoNode1Node.getNodeName().equals("DemandSum"))
+                                                DemandSum = MessageInfoNode1Node.getTextContent();
+                                            if (MessageInfoNode1Node.getNodeName().equals("CreditorName"))
+                                                CreditorName = MessageInfoNode1Node.getTextContent();
+                                            if (MessageInfoNode1Node.getNodeName().equals("ReasonOccurence")) ;
+                                            ReasonOccurence = MessageInfoNode1Node.getTextContent();
+                                        } catch (Exception e) {
+                                            System.out.println("исключение при получении данных крдитора:" + MessageInfoNode1Node.getNodeName() );
+                                            System.out.println(e);
+                                            System.out.println();
+                                        }
 
                                       //  еслn MessageInfoNode1 - MessageInfo
+                                        try {
                                         if (MessageInfoNode1Node.getNodeName().equals("DecisionType")){
                                             DecisionType = MessageInfoNode1Node.getAttributes();
                                             DecisionTypeId=DecisionType.getNamedItem("Id").getTextContent();
-
-
+                                        }  } catch (Exception e) {
+                                            System.out.println("исключение при получении данных типа рещения:" + MessageInfoNode1Node.getNodeName() );
+                                            System.out.println(e);
+                                            System.out.println();
                                         }
 
 
@@ -150,11 +159,21 @@ public class insolvents {
 
                                     BankruptInfoNode1 = BankruptInfoNodeList.item(0);
 
-                                    BankruptPerson = BankruptInfoNode1.getAttributes();
-                                    FirstName = BankruptPerson.getNamedItem("FirstName").getTextContent();
-                                    MiddleName = BankruptPerson.getNamedItem("MiddleName").getTextContent();
-                                    LastName = BankruptPerson.getNamedItem("LastName").getTextContent();
-                                    Address = BankruptPerson.getNamedItem("Address").getTextContent();
+                                    try {
+                                        BankruptPerson = BankruptInfoNode1.getAttributes();
+                                        FirstName = BankruptPerson.getNamedItem("FirstName").getTextContent();
+                                        MiddleName = BankruptPerson.getNamedItem("MiddleName").getTextContent();
+                                        LastName = BankruptPerson.getNamedItem("LastName").getTextContent();
+                                        Address = BankruptPerson.getNamedItem("Address").getTextContent();
+                                    } catch (Exception e) {
+
+                                        System.out.println("исключение при получении данных банкротв:" + BankruptInfoNode1.getNodeName() );
+                                        System.out.println(e);
+                                        System.out.println();
+
+
+                                    }
+
 
                                     BankruptPersonNodeList = BankruptInfoNode1.getChildNodes();
 
@@ -220,10 +239,10 @@ public class insolvents {
 
                         }
 
-                        if ( MessageType.equals("ArbitralDecree") & ( DecisionTypeId.equals(7) | DecisionTypeId.equals(19)) )  {
+                        if ( MessageType.equals("ArbitralDecree") & ( DecisionTypeId.equals("7") | DecisionTypeId.equals("19")) )  {
                             inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",'" + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + DecisionTypeId + "')";
 
-                            System.out.println(inserting);
+                          //  System.out.println(inserting);
                            /*
                             try {
                                 st.executeUpdate(inserting);
@@ -237,10 +256,10 @@ public class insolvents {
 
 
 
-                        if (MessageType.equals("ReceivingCreditorDemand")) {
+                        if (MessageType.equals("ReceivingCreditorDemand") ) {
                             creditor_inserting = "Insert into [DEV].[dbo].[creditors]  VALUES (" + INN + ", '" + CreditorName + "', '" + DemandSum + "', '" + DemandDate + "', '" + ReasonOccurence + "')";
 
-                            System.out.println(creditor_inserting);
+                            //System.out.println(creditor_inserting);
 
                             /*
                             try {
@@ -254,6 +273,14 @@ public class insolvents {
 
                         }
                         */
+
+                            if (CreditorName.contains("БЫСТРО")) {
+                                mfo_demand_inserting = "Insert into [DEV].[dbo].[mfo_demands]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",'" + Birthdate + "', '" + Birthplace + "', '"+ CreditorName + "', '" + DemandSum + "', '" + DemandDate + "', '" + ReasonOccurence + "')";
+                                System.out.println(mfo_demand_inserting);
+
+                            }
+
+
 
 
 
