@@ -72,8 +72,13 @@ public class insolvents {
                     //(int i = 0; i < mdl.getLength(); i++)
                 (int i = 0; i < mdl.getLength(); i++) {
                     md = mdl.item(i);
+
+                    FirstName = MiddleName = LastName = Address = Birthdate = Birthplace = MessageType = CaseNumber = "NULL";
+                    CreditorName= DemandSum = DemandDate = ReasonOccurence = "NULL";
                     nlist = md.getChildNodes();
                     //System.out.println(i + ": ");
+
+
 
                     for (int ii = 0; ii < nlist.getLength(); ii++) {
 
@@ -107,12 +112,17 @@ public class insolvents {
                                                 DemandDate = MessageInfoNode1Node.getTextContent();
                                             if (MessageInfoNode1Node.getNodeName().equals("DemandSum"))
                                                 DemandSum = MessageInfoNode1Node.getTextContent();
-                                            if (MessageInfoNode1Node.getNodeName().equals("CreditorName"))
+                                            if (MessageInfoNode1Node.getNodeName().equals("CreditorName")) {
                                                 CreditorName = MessageInfoNode1Node.getTextContent();
-                                            if (MessageInfoNode1Node.getNodeName().equals("ReasonOccurence")) ;
-                                            ReasonOccurence = MessageInfoNode1Node.getTextContent();
+                                               if (CreditorName.length()>199) CreditorName =MessageInfoNode1Node.getTextContent().substring(0,198);;
+                                            }
+                                            if (MessageInfoNode1Node.getNodeName().equals("ReasonOccurence")) {
+                                                ReasonOccurence = MessageInfoNode1Node.getTextContent();
+                                               if (ReasonOccurence.length()>148) ReasonOccurence = MessageInfoNode1Node.getTextContent().substring(0,149);;
+
+                                            }
                                         } catch (Exception e) {
-                                            System.out.println("исключение при получении данных крдитора:" + MessageInfoNode1Node.getNodeName() );
+                                            System.out.println("исключение при получении данных кредитора:" + MessageInfoNode1Node.getNodeName() );
                                             System.out.println(e);
                                             System.out.println();
                                         }
@@ -162,13 +172,24 @@ public class insolvents {
                                     try {
                                         BankruptPerson = BankruptInfoNode1.getAttributes();
                                         FirstName = BankruptPerson.getNamedItem("FirstName").getTextContent();
-                                        MiddleName = BankruptPerson.getNamedItem("MiddleName").getTextContent();
+                                        try {
+                                            MiddleName = BankruptPerson.getNamedItem("MiddleName").getTextContent();
+                                        } catch (java.lang.NullPointerException e){
+                                            System.out.println("нет отчества у  "+BankruptInfo);
+                                            MiddleName = "";
+
+                                        }
                                         LastName = BankruptPerson.getNamedItem("LastName").getTextContent();
                                         Address = BankruptPerson.getNamedItem("Address").getTextContent();
+
+                                        if (Address.length()>198) Address = BankruptPerson.getNamedItem("Address").getTextContent().substring(0,199);;
+
+
                                     } catch (Exception e) {
 
                                         System.out.println("исключение при получении данных банкротв:" + BankruptInfoNode1.getNodeName() );
-                                        System.out.println(e);
+                                        System.out.println(e + ": ");
+                                        System.out.println(BankruptInfo);
                                         System.out.println();
 
 
@@ -243,15 +264,17 @@ public class insolvents {
                             inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",'" + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + DecisionTypeId + "')";
 
                           //  System.out.println(inserting);
-                           /*
+
+                            /*
                             try {
                                 st.executeUpdate(inserting);
                             } catch ( SQLException e) {
                                 System.out.println("Исключение " +e + " в строке ");
                                 System.out.println(inserting);
                             }
+                            */
 
-                         */
+
                         }
 
 
@@ -270,13 +293,40 @@ public class insolvents {
                                 System.out.println("Исключение " +e + " в строке ");
                                 System.out.println(creditor_inserting);
                             }
+                            */
 
                         }
-                        */
 
-                            if (CreditorName.contains("БЫСТРО")) {
-                                mfo_demand_inserting = "Insert into [DEV].[dbo].[mfo_demands]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",'" + Birthdate + "', '" + Birthplace + "', '"+ CreditorName + "', '" + DemandSum + "', '" + DemandDate + "', '" + ReasonOccurence + "')";
-                                System.out.println(mfo_demand_inserting);
+
+                            if  ( (MessageType.equals("ReceivingCreditorDemand")) &
+                            ( CreditorName.contains("фонд содействия") |
+                                  CreditorName.contains("РУСИНТЕРФИНАНС") |  CreditorName.contains("5408292849") |
+                                 CreditorName.contains("ЗАЙМЕР") | CreditorName.contains("4205271785") |
+                                 CreditorName.contains("ЦЕНТР ФИНАНСОВОЙ") | CreditorName.contains("6234006961") |
+
+                                CreditorName.contains("ПРОСТОДЕНЬГИ") | CreditorName.contains("4205219217") |
+                                CreditorName.contains("элемент") |  CreditorName.contains("ПЯТЫЙ") | CreditorName.contains("4025443121") |
+
+
+                                CreditorName.contains("4ФИНАНС") |  CreditorName.contains("7724351447") |
+                                 CreditorName.contains("ВЛ-ФИНАНС") | CreditorName.contains("2538081836") |
+                                CreditorName.contains("смс") | CreditorName.contains("7729677643") |
+                                CreditorName.contains("АРИФМЕТИКА")   | CreditorName.contains("5410059568") |
+                                 CreditorName.contains("микро") | CreditorName.contains("МИКРО")
+
+                            ) )
+
+                            {
+                                mfo_demand_inserting = "Insert into [DEV].[dbo].[mfo_demands]  VALUES (" + INN  + ",'" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', '" +  Birthdate + "', '" + Birthplace + "', '"+ CreditorName + "', '" + DemandSum + "', '" + DemandDate + "', '" + ReasonOccurence + "')";
+                                try {
+                                    st.executeUpdate(mfo_demand_inserting);
+
+                                } catch ( SQLException e) {
+
+                                    System.out.println("Исключение " +e + " в строке: ");
+                                    System.out.println(mfo_demand_inserting);
+                                }
+                                //System.out.println(mfo_demand_inserting);
 
                             }
 
@@ -289,7 +339,7 @@ public class insolvents {
                         //здесь заканчивается тег message data
 
                     }
-                }
+
 
 
             } catch (IOException e) {
