@@ -1,3 +1,4 @@
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -35,16 +36,23 @@ public class insolvents {
                 NodeList mdl = root.getChildNodes();
                 System.out.println("длина: " + mdl.getLength());
 
-                NodeList nlist, BankruptInfoNodeList, BankruptPersonNodeList, MessageInfoNodeList, MessageInfoNode1NodeList, CourtDecisionNodeList;
-                Node md, nn, an, BankruptInfoNode1, BankruptPersonNode, MessageInfoNode1, MessageInfoNode1Node, CourtDecisionNode;
-                NamedNodeMap BankruptPerson, MessageInfo, DecisionType;
+                NodeList nlist, BankruptInfoNodeList, BankruptPersonNodeList, MessageInfoNodeList, MessageInfoNode1NodeList, CourtDecisionNodeList, CourtDecreeNodeNodeList;
+                Node md, nn, an, BankruptInfoNode1, BankruptPersonNode, MessageInfoNode1, MessageInfoNode1Node, CourtDecisionNode, CourtDecreeNode;
+                NamedNodeMap BankruptPerson, MessageInfo, DecisionType, BankruptInfoNodeMap;
 
-                String BankruptInfo;
+                String Id, BankruptInfo;
+                int Idint;
+
+                Id = "NULL";
+                Idint=0;
 
                 // для банкрота
                 String FirstName, MiddleName, LastName, Address, Birthdate, Birthplace, MessageType, CaseNumber;
                 FirstName = MiddleName = LastName = Address = Birthdate = Birthplace = MessageType = CaseNumber = "NULL";
                 long INN=0;
+
+                String BankruptType, BankruptCategory;
+                BankruptType = BankruptCategory = "NULL";
 
 
 
@@ -56,6 +64,10 @@ public class insolvents {
 
                 //для типа решения
                 String DecisionTypeId="NULL";
+
+                //для суда
+                String CourtId,CourtName;
+                CourtId = CourtName ="NULL";
 
 
                 String inserting, creditor_inserting, mfo_demand_inserting;
@@ -73,29 +85,56 @@ public class insolvents {
                 (int i = 0; i < mdl.getLength(); i++) {
                     md = mdl.item(i);
 
-                    FirstName = MiddleName = LastName = Address = Birthdate = Birthplace = MessageType = CaseNumber = "NULL";
+                    Id="NULL";
+                    FirstName = MiddleName = LastName = Address = Birthdate = Birthplace = MessageType = CaseNumber = DecisionTypeId = "NULL";
                     CreditorName= DemandSum = DemandDate = ReasonOccurence = "NULL";
+                    BankruptType = BankruptCategory = "NULL";
+                    CourtId = CourtName ="NULL";
+                    INN = 0;
+                    Idint=0;
+
                     nlist = md.getChildNodes();
                     //System.out.println(i + ": ");
+
+                    //
 
 
 
                     for (int ii = 0; ii < nlist.getLength(); ii++) {
 
+
+
                         ishuman = false;
                         nn = nlist.item(ii);
+
+                        if (nn.getNodeName().equals("Id")) {
+
+                            Id = nn.getTextContent();
+
+                            try {
+                                Idint = Integer.parseInt(nn.getTextContent());
+                            } catch (Exception e) {
+                                System.out.println("Неужели здесь исключение! Id" + Id);
+
+                            }
+
+
+                        }
+
 
                         if (nn.getNodeName().equals("MessageInfo")) {
 
                             MessageInfo = nn.getAttributes();
 
+                            try {
+                                MessageType = MessageInfo.getNamedItem("MessageType").getTextContent();
+                            } catch (Exception e) {
+                                System.out.println(Id + "исключение при получении MessageType"+ e);
 
-                            MessageType = MessageInfo.getNamedItem("MessageType").getTextContent();
+                            }
 
                             //System.out.println("MessageType: "+ MessageType);
-
-
-                            if ((MessageType.equals("ReceivingCreditorDemand") | MessageType.equals("ArbitralDecree")) & nn.hasChildNodes()) {
+                           if ((MessageType.equals("ReceivingCreditorDemand") | MessageType.equals("ArbitralDecree")) & nn.hasChildNodes()) {
 
                                 MessageInfoNodeList = nn.getChildNodes();
                                 MessageInfoNode1 = MessageInfoNodeList.item(0);
@@ -132,14 +171,38 @@ public class insolvents {
                                         if (MessageInfoNode1Node.getNodeName().equals("DecisionType")){
                                             DecisionType = MessageInfoNode1Node.getAttributes();
                                             DecisionTypeId=DecisionType.getNamedItem("Id").getTextContent();
-                                        }  } catch (Exception e) {
+                                        }
+                                        } catch (Exception e) {
                                             System.out.println("исключение при получении данных типа рещения:" + MessageInfoNode1Node.getNodeName() );
                                             System.out.println(e);
                                             System.out.println();
                                         }
 
 
+                                        if (MessageInfoNode1Node.getNodeName().equals("CourtDecree")){
+                                            if (MessageInfoNode1Node.hasChildNodes()) {
+                                                CourtDecreeNodeNodeList = MessageInfoNode1Node.getChildNodes();
+                                                for (int cdn = 0; cdn <CourtDecreeNodeNodeList.getLength();  cdn++) {
+                                                   CourtDecisionNode = CourtDecreeNodeNodeList.item(cdn);
 
+                                                    if (CourtDecisionNode.getNodeName().equals("CourtId"))
+                                                        CourtId = CourtDecisionNode.getTextContent();
+
+                                                    if (CourtDecisionNode.getNodeName().equals("CourtName"))
+                                                        CourtName = CourtDecisionNode.getTextContent();
+
+
+
+
+                                                }
+
+
+
+
+
+                                            }
+
+                                        }
 
 
 
@@ -158,9 +221,34 @@ public class insolvents {
 
                             BankruptInfo = nn.getTextContent();
 
+                            if (nn.hasAttributes()) {
+                                BankruptInfoNodeMap = nn.getAttributes();
+
+                                try {
+                                    BankruptType = BankruptInfoNodeMap.getNamedItem("BankruptType").getTextContent();
+                                } catch (Exception e) {
+                                    System.out.println(Id+ " исключение при получении BankruptType  "+ e);
+                                }
+
+                                if (BankruptType.equals("Person")) {
+
+                                try {
+                                    BankruptCategory = BankruptInfoNodeMap.getNamedItem("BankruptCategory").getTextContent();
+                                } catch (Exception e) {
+                                    System.out.println(Id + " исключение при получении  BankruptCategory " + e);
+
+                                }
+                                }
+
+                            }
+
+
+
+
                             if (BankruptInfo.length() > 10) {
 
                                 ishuman = true;
+
 
 
                                 if (nn.hasChildNodes()) {
@@ -182,7 +270,7 @@ public class insolvents {
                                         LastName = BankruptPerson.getNamedItem("LastName").getTextContent();
                                         Address = BankruptPerson.getNamedItem("Address").getTextContent();
 
-                                        if (Address.length()>198) Address = BankruptPerson.getNamedItem("Address").getTextContent().substring(0,199);;
+                                        if (Address.length()>198) Address = BankruptPerson.getNamedItem("Address").getTextContent().substring(0,198);
 
 
                                     } catch (Exception e) {
@@ -191,8 +279,6 @@ public class insolvents {
                                         System.out.println(e + ": ");
                                         System.out.println(BankruptInfo);
                                         System.out.println();
-
-
                                     }
 
 
@@ -203,10 +289,35 @@ public class insolvents {
                                         //System.out.println("BankruptPersonNode  " + BankruptPersonNode.getNodeName() + "  " + BankruptPersonNode.getTextContent());
 
 
-                                        if (BankruptPersonNode.getNodeName().equals("Birthdate"))
-                                            Birthdate = BankruptPersonNode.getTextContent();
-                                        if (BankruptPersonNode.getNodeName().equals("Birthplace"))
+                                        if (BankruptPersonNode.getNodeName().equals("Birthdate")) {
+                                            //System.out.println(BankruptPersonNode.getTextContent());
+
+
+                                            if (BankruptPersonNode.getTextContent().length() > 8)
+                                                Birthdate = BankruptPersonNode.getTextContent().substring(6, 10) + BankruptPersonNode.getTextContent().substring(3, 5) + BankruptPersonNode.getTextContent().substring(0, 2);
+
+                                            if (Birthdate.contains(" ")) {
+                                                System.out.println(Id+"  дата рождения указана так: "+BankruptPersonNode.getTextContent() );
+                                            }
+
+
+
+                                            if ((BankruptPersonNode.getTextContent().length() < 5) & ( BankruptPersonNode.getTextContent().length() > 1)  ) {
+                                                System.out.println(Id + " нестандартый Birthdate: " + BankruptPersonNode.getTextContent());
+                                                Birthdate = "NULL";
+                                            }
+
+                                            //Birthdate = BankruptPersonNode.getTextContent().substring(6, 10)+"0101";
+                                            if (BankruptPersonNode.getTextContent().length() < 1)
+                                                //System.out.println(Id +" пустой Birthdate: ");
+                                                Birthdate = "NULL";
+
+                                        }
+                                        if (BankruptPersonNode.getNodeName().equals("Birthplace")) {
                                             Birthplace = BankruptPersonNode.getTextContent();
+                                            if (Birthplace.length()>148) Address = BankruptPersonNode.getTextContent().substring(0,148);
+
+                                        }
                                         if (BankruptPersonNode.getNodeName().equals("INN"))
                                             INN = Long.parseLong(BankruptPersonNode.getTextContent());
 
@@ -260,22 +371,51 @@ public class insolvents {
 
                         }
 
-                        if ( MessageType.equals("ArbitralDecree") & ( DecisionTypeId.equals("7") | DecisionTypeId.equals("19")) )  {
-                            inserting = "Insert into [DEV].[dbo].[bankrots]  VALUES ('" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",'" + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + DecisionTypeId + "')";
 
-                          //  System.out.println(inserting);
 
-                            /*
-                            try {
-                                st.executeUpdate(inserting);
-                            } catch ( SQLException e) {
-                                System.out.println("Исключение " +e + " в строке ");
-                                System.out.println(inserting);
-                            }
-                            */
 
+
+
+
+                         if ( MessageType.equals("ArbitralDecree") &  DecisionTypeId.equals("19") ) {
+                             //проверка, почему повторяются INN
+                             if ((INN == 32500507306L) | (INN == 440115172411L) | (INN == 772578505500L) | (INN == 27318258906L) | (INN == 323300345309L)) {
+                                 System.out.println(Id + " " + INN + " " + FirstName + " " + MiddleName + " " + LastName + " " + MessageType + " " + DecisionTypeId);
+
+                             }
+
+
+/*
+                             if (Birthdate.equals("NULL"))
+                            inserting = "Insert into [DEV].[dbo].[bankrots19-6]  VALUES ('"+BankruptCategory+ "', '" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",NULL,'" + Birthplace + "', '" + CaseNumber + "', '" +CourtId + "', '"+ CourtName + "', '"+ DecisionTypeId + "')";
+                            else
+                            inserting = "Insert into [DEV].[dbo].[bankrots19-6]  VALUES ('"+BankruptCategory+ "', '" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ", ' "+ Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" +CourtId + "', '"+ CourtName + "', '"+ DecisionTypeId + "')";
+*/
+
+                             if (Birthdate.equals("NULL"))
+                                 inserting = "Insert into [DEV].[dbo].[bankrots19-6]  VALUES (" + Idint + ",'" + BankruptCategory + "', '" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ",NULL,'" + Birthplace + "', '" + CaseNumber + "', '" + CourtId + "', '" + CourtName + "', '" + DecisionTypeId + "')";
+                             else
+                                 inserting = "Insert into [DEV].[dbo].[bankrots19-6]  VALUES (" + Idint + ",'" + BankruptCategory + "', '" + FirstName + "', '" + MiddleName + "', '" + LastName + "', '" + Address + "', " + INN + ", ' " + Birthdate + "', '" + Birthplace + "', '" + CaseNumber + "', '" + CourtId + "', '" + CourtName + "', '" + DecisionTypeId + "')";
+
+
+                             //System.out.println(inserting);
+
+
+                             try {
+                                 st.executeUpdate(inserting);
+                             } catch (SQLException e) {
+                                 System.out.println("Исключение " + e + " в сообщении " + Id);
+                                 System.out.println(inserting);
+                                 System.out.println("Bitrhdate "+ Birthdate);
+
+                             }
+
+                         }
 
                         }
+
+
+                        /*
 
 
 
@@ -284,7 +424,7 @@ public class insolvents {
 
                             //System.out.println(creditor_inserting);
 
-                            /*
+
                             try {
                                 st.executeUpdate(creditor_inserting);
                             } catch ( SQLException e) {
@@ -293,9 +433,11 @@ public class insolvents {
                                 System.out.println("Исключение " +e + " в строке ");
                                 System.out.println(creditor_inserting);
                             }
-                            */
+
 
                         }
+
+
 
 
                             if  ( (MessageType.equals("ReceivingCreditorDemand")) &
@@ -329,6 +471,7 @@ public class insolvents {
                                 //System.out.println(mfo_demand_inserting);
 
                             }
+                            */
 
 
 
@@ -338,15 +481,17 @@ public class insolvents {
 
                         //здесь заканчивается тег message data
 
-                    }
+
 
 
 
             } catch (IOException e) {
-                System.out.println(e);
+
+                System.out.println(file+" "+e);
+
 
             } catch (Exception e) {
-                System.out.println(e);
+                System.out.println(file+" "+e);
             }
         }
 
