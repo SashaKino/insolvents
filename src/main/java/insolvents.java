@@ -54,10 +54,6 @@ public class insolvents {
                 String BankruptType, BankruptCategory;
                 BankruptType = BankruptCategory = "NULL";
 
-
-
-
-
                 // для кредитора
                 String CreditorName, DemandSum, DemandDate, ReasonOccurence;
                 CreditorName= DemandSum = DemandDate = ReasonOccurence = "NULL";
