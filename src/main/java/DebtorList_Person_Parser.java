@@ -17,12 +17,15 @@ public class DebtorList_Person_Parser {
         Node DebtorPerson;
         NamedNodeMap DebtorPersonNM;
 
+        Node second;
+        NodeList nlist,  EGRIPDifferenceslist;
+
 
         File dir = new File("C:\\Source\\debtorlist\\");
         File[] list = dir.listFiles();
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        String FirstName, MiddleName, LastName, Address, Birthdate, Region, LastMessageDate, CategoryCode,SNILS, INN, month = "NULL";
+        String FirstName, MiddleName, LastName, Address, Birthdate, Region, LastMessageDate, CategoryCode,SNILS, INN, EGRIPOGRNIP, month = "NULL";
         //long INN = 0;
         String inserting;
 
@@ -52,7 +55,7 @@ public class DebtorList_Person_Parser {
                     for (int i = 0; i < nl.getLength(); i++) {
                         DebtorPerson = nl.item(i);
 
-                        FirstName = MiddleName = LastName = Address = Birthdate = Region = LastMessageDate = CategoryCode = SNILS = INN = "NULL";
+                        FirstName = MiddleName = LastName = Address = Birthdate = Region = LastMessageDate = CategoryCode = SNILS = INN = EGRIPOGRNIP ="NULL";
 
 
                         try {
@@ -105,7 +108,8 @@ public class DebtorList_Person_Parser {
                             try {
                                 Birthdate ="'"+DebtorPersonNM.getNamedItem("Birthdate").getTextContent()+"'";
                             } catch (Exception e) {
-                                System.out.println(e+ " Birthdate "  );
+                                Birthdate = "NULL";
+                               // System.out.println(e+ " Birthdate "  );
                             }
 
 
@@ -114,8 +118,29 @@ public class DebtorList_Person_Parser {
                                 Address ="'"+ Address + "'";
 
 
-                            inserting = "INSERT into [debtorlist2] values " + " " + "(" + FirstName + ", " + MiddleName + ", " + LastName + ", " + INN + ", " + SNILS + ", " + Region + ", " + Address + ", " + Birthdate + ", " + CategoryCode + ", " + month + ")";
-                            //System.out.println(inserting);
+                            //Вот здесь получим EGRIP
+                            nlist = DebtorPerson.getChildNodes();
+                            if (nlist.getLength() > 1 ) {
+                            for (int ii=0; ii  < nlist.getLength(); ii++) {
+
+                                if (nlist.item(ii).getNodeName().equals("EGRIPDifferences")){
+
+                                    //System.out.println(ii);
+                                    EGRIPDifferenceslist = nlist.item(ii).getChildNodes();
+
+                                    for (int iii=0; iii  <  EGRIPDifferenceslist.getLength(); iii++)
+                                    {
+                                        if (EGRIPDifferenceslist.item(iii).getNodeName().equals("EGRIPOGRNIP")){
+                                            EGRIPOGRNIP ="'"+ EGRIPDifferenceslist.item(iii).getTextContent()+"'" ;
+                                          // System.out.println(LastName+" EGRIPOGRNIP "+ EGRIPDifferenceslist.item(iii).getTextContent() );
+                                        }
+
+                                    }
+
+
+
+                                    inserting = "INSERT into [debtorlist3] values " + " " + "(" + FirstName + ", " + MiddleName + ", " + LastName + ", " + INN + ", " + SNILS + ", " + EGRIPOGRNIP + ", "+ Region + ", " + Address + ", " + Birthdate + ", " + CategoryCode + ", " + month + ")";
+                                     System.out.println(inserting);
 
 
                             try {
@@ -126,8 +151,21 @@ public class DebtorList_Person_Parser {
                             }
 
 
+
+
+
+
+                                }
+
+                                //System.out.println(nlist.item(ii).getNodeName());
+                            }
+
+                            }
+
+
+
                         } catch (Exception o) {
-                            System.out.println(FirstName + MiddleName + LastName + Address + Birthdate + Region + LastMessageDate + CategoryCode + SNILS);
+                            System.out.println(o + "here" +FirstName + MiddleName + LastName + Address + Birthdate + Region + LastMessageDate + CategoryCode + SNILS);
                         }
 
                     }

@@ -229,7 +229,7 @@ public class insolvents {
                                 if (BankruptType.equals("Person")) {
 
                                 try {
-                                    BankruptCategory = BankruptInfoNodeMap.getNamedItem("BankruptCategory").getTextContent();
+                                    BankruptCategory ="'"+ BankruptInfoNodeMap.getNamedItem("BankruptCategory").getTextContent()+"'";
                                 } catch (Exception e) {
                                     System.out.println(Id + " исключение при получении  BankruptCategory " + e);
 
@@ -291,7 +291,7 @@ public class insolvents {
 
 
                                             if (BankruptPersonNode.getTextContent().length() > 8)
-                                                Birthdate = BankruptPersonNode.getTextContent().substring(6, 10) + BankruptPersonNode.getTextContent().substring(3, 5) + BankruptPersonNode.getTextContent().substring(0, 2);
+                                                Birthdate = "'"+ BankruptPersonNode.getTextContent().substring(6, 10) + BankruptPersonNode.getTextContent().substring(3, 5) + BankruptPersonNode.getTextContent().substring(0, 2)+"'";
 
                                             if (Birthdate.contains(" ")) {
                                                 System.out.println(Id+"  дата рождения указана так: "+BankruptPersonNode.getTextContent() );
@@ -398,12 +398,12 @@ public class insolvents {
                             // if (Birthdate.equals("NULL"))
                             //     inserting = "Insert into [DEV].[dbo].[bankrots19-7]  VALUES (" + Idint + ",'" + BankruptCategory + "', '" + FirstName + "', '" + MiddleName + "', '" + LastName + "', " + Address + ", " + INN + ",NULL,'" + Birthplace + "', '" + CaseNumber + "', '" + CourtId + "', '" + CourtName + "', '" + DecisionTypeId + "')";
                             // else
-                                 inserting = "Insert into [DEV].[dbo].[bankrots19-7]  VALUES (" + Idint + ",'" + BankruptCategory + "', " + FirstName + ", " + MiddleName + ", " + LastName + ", " + Address + ", " + INN + ", " +SNILS + ",'"  + Birthdate + "', " + Birthplace + ", " + CaseNumber + ", " + CourtId + ", " + CourtName + ", " + DecisionTypeId + ")";
+                                 inserting = "Insert into [DEV].[dbo].[bankrots19-7]  VALUES (" + Idint + "," + BankruptCategory + ", " + FirstName + ", " + MiddleName + ", " + LastName + ", " + Address + ", " + INN + ", " +SNILS + ","  + Birthdate + ", " + Birthplace + ", " + CaseNumber + ", " + CourtId + ", " + CourtName + ", " + DecisionTypeId + ")";
 
 
                              System.out.println(inserting);
 
-/*
+
                              try {
                                  st.executeUpdate(inserting);
                              } catch (SQLException e) {
@@ -412,7 +412,7 @@ public class insolvents {
                                  System.out.println("Bitrhdate "+ Birthdate);
 
                              }
-*/
+
 
 
                          }
