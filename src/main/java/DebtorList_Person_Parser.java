@@ -20,12 +20,12 @@ public class DebtorList_Person_Parser {
         Node second;
         NodeList nlist,  EGRIPDifferenceslist;
 
-
         File dir = new File("C:\\Source\\debtorlist\\");
+        File dir1 = new File("C:\\Source\\debtorlist2\\");
         File[] list = dir.listFiles();
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        String FirstName, MiddleName, LastName, Address, Birthdate, Region, LastMessageDate, CategoryCode,SNILS, INN, EGRIPOGRNIP, month = "NULL";
+        String FirstName, MiddleName, LastName, Address, Birthdate, Region, LastMessageDate, CategoryCode, BankruptId, SNILS, INN, EGRIPOGRNIP, month = "NULL";
         //long INN = 0;
         String inserting;
 
@@ -55,10 +55,11 @@ public class DebtorList_Person_Parser {
                     for (int i = 0; i < nl.getLength(); i++) {
                         DebtorPerson = nl.item(i);
 
-                        FirstName = MiddleName = LastName = Address = Birthdate = Region = LastMessageDate = CategoryCode = SNILS = INN = EGRIPOGRNIP ="NULL";
+                        FirstName = MiddleName = LastName = Address = Birthdate = Region = LastMessageDate = CategoryCode = BankruptId = SNILS = INN = EGRIPOGRNIP ="NULL";
 
 
                         try {
+
                             DebtorPersonNM = DebtorPerson.getAttributes();
 
                             FirstName ="'"+ DebtorPersonNM.getNamedItem("FirstName").getTextContent()+"'";
@@ -71,6 +72,7 @@ public class DebtorList_Person_Parser {
 
 
                             LastName ="'"+  DebtorPersonNM.getNamedItem("LastName").getTextContent()+"'";
+                           // System.out.println(i+" "+LastName);
 
 
 
@@ -80,6 +82,14 @@ public class DebtorList_Person_Parser {
                             } catch (Exception e) {
 
                             }
+
+
+                            try {
+                                BankruptId = DebtorPersonNM.getNamedItem("BankruptId").getTextContent();
+                            } catch (Exception e) {
+
+                            }
+
 
                             try {
                                 SNILS = "'"+DebtorPersonNM.getNamedItem("SNILS").getTextContent()+"'";
@@ -113,34 +123,44 @@ public class DebtorList_Person_Parser {
                             }
 
 
-                            if (Address.length() > 198)
-                                Address = DebtorPersonNM.getNamedItem("Adress").getTextContent().substring(0, 198);
-                                Address ="'"+ Address + "'";
+                            try {
+                                if (Address.length() > 198)
+                                    Address = Address.substring(0, 198);
+                                Address = "'" + Address + "'";
+                            } catch (Exception e) {
+                                System.out.println("у  "+LastName+" в адресе " +e);
+                                Address = "NULL";
+                            }
+
+
 
 
                             //Вот здесь получим EGRIP
                             nlist = DebtorPerson.getChildNodes();
                             if (nlist.getLength() > 1 ) {
-                            for (int ii=0; ii  < nlist.getLength(); ii++) {
+                                for (int ii = 0; ii < nlist.getLength(); ii++) {
 
-                                if (nlist.item(ii).getNodeName().equals("EGRIPDifferences")){
+                                    if (nlist.item(ii).getNodeName().equals("EGRIPDifferences")) {
 
-                                    //System.out.println(ii);
-                                    EGRIPDifferenceslist = nlist.item(ii).getChildNodes();
+                                        //System.out.println(ii);
+                                        EGRIPDifferenceslist = nlist.item(ii).getChildNodes();
 
-                                    for (int iii=0; iii  <  EGRIPDifferenceslist.getLength(); iii++)
-                                    {
-                                        if (EGRIPDifferenceslist.item(iii).getNodeName().equals("EGRIPOGRNIP")){
-                                            EGRIPOGRNIP ="'"+ EGRIPDifferenceslist.item(iii).getTextContent()+"'" ;
-                                          // System.out.println(LastName+" EGRIPOGRNIP "+ EGRIPDifferenceslist.item(iii).getTextContent() );
+                                        for (int iii = 0; iii < EGRIPDifferenceslist.getLength(); iii++) {
+                                            if (EGRIPDifferenceslist.item(iii).getNodeName().equals("EGRIPOGRNIP")) {
+                                                EGRIPOGRNIP = "'" + EGRIPDifferenceslist.item(iii).getTextContent() + "'";
+                                                // System.out.println(LastName+" EGRIPOGRNIP "+ EGRIPDifferenceslist.item(iii).getTextContent() );
+                                            }
+
                                         }
-
                                     }
+                                }
+                            }
 
 
 
-                                    inserting = "INSERT into [debtorlist3] values " + " " + "(" + FirstName + ", " + MiddleName + ", " + LastName + ", " + INN + ", " + SNILS + ", " + EGRIPOGRNIP + ", "+ Region + ", " + Address + ", " + Birthdate + ", " + CategoryCode + ", " + month + ")";
-                                     System.out.println(inserting);
+                                   // inserting = "INSERT into [debtorlist3] values " + " " + "(" + FirstName + ", " + MiddleName + ", " + LastName + ", " + INN + ", " + SNILS + ", " + EGRIPOGRNIP + ", "+ Region + ", " + Address + ", " + Birthdate + ", " + CategoryCode + ", " + month + ")";
+                                    inserting = "INSERT into [debtorlist4] values " + " " + "(" + FirstName + ", " + MiddleName + ", " + LastName + ", " +BankruptId+ ", " + INN + ", " + SNILS + ", " + EGRIPOGRNIP + ", "+ Region + ", " + Address + ", " + Birthdate + ", " + CategoryCode + ", " + month + ")";
+                                   // System.out.println(inserting);
 
 
                             try {
@@ -154,18 +174,8 @@ public class DebtorList_Person_Parser {
 
 
 
-
-                                }
-
-                                //System.out.println(nlist.item(ii).getNodeName());
-                            }
-
-                            }
-
-
-
                         } catch (Exception o) {
-                            System.out.println(o + "here" +FirstName + MiddleName + LastName + Address + Birthdate + Region + LastMessageDate + CategoryCode + SNILS);
+                            System.out.println(o + " в файле "+ file+ ": " +FirstName + MiddleName + LastName + Address + Birthdate + Region + LastMessageDate + CategoryCode + SNILS);
                         }
 
                     }
